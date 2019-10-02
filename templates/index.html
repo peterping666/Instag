@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% load custom_tags %}
+
+{% block content %}
+
+<ul>
+    {% if request.user.is_authenticated %}
+        <li>
+            Hi, {{request.user.username}}
+        </li>
+        <li>
+            <a href="{% url 'logout' %}">Logout</a>
+        </li>
+    {% else %}
+        <li>
+            <a href="{% url 'login' %}">Login</a>
+        </li>
+        <li>
+            <a href="{% url 'signup' %}">Sign Up</a>
+        </li>
+    {% endif %}
+
+<a href="{% url 'post_create' %}">Make a post</a>
+
+
+</ul>
+
+<div>
+    {% for post in object_list %}
+        <div>
+        {% if post.author.profile_img %}
+            <img src="/{{post.author.profile_img}}"
+        {% endif %}
+        <br>
+        <br>
+        {{post.author.username}}
+        <br><br><br>
+        {{post.title}}<br>
+        <a href="{% url 'post_detail' post.id %}">
+        <img src="/{{post.image}}">
+        </a>
+        </div>
+        <div>
+            {% if post.get_like_count %}
+                {{post.get_like_count}} like{% if post.get_like_count > 1 %}s{% endif %}
+            {% endif %}
+        <div>
+        <i class="{% has_user_liked_post post user %} fa-heart"></i>
+    {% endfor %}
+    
+</div>
+
+{% endblock content %}
+
+
+
+    
